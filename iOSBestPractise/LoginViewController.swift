@@ -136,19 +136,19 @@ extension LoginViewController {
     func addKeyBoardobserver() {
         
         let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard), name: Notification.Name.UIKeyboardWillHide, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard), name: Notification.Name.UIKeyboardWillChangeFrame, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
         
     }
     
     
-    func adjustForKeyboard(notification: Notification) {
+    @objc func adjustForKeyboard(notification: Notification) {
         let userInfo = notification.userInfo!
         
-        let keyboardScreenEndFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        let keyboardScreenEndFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         let keyboardViewEndFrame = view.convert(keyboardScreenEndFrame, from: view.window)
         
-        if notification.name == Notification.Name.UIKeyboardWillHide {
+        if notification.name == UIResponder.keyboardWillHideNotification {
             self.scrollView.contentInset = UIEdgeInsets.zero
         } else {
             self.scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardViewEndFrame.height, right: 0)
@@ -165,7 +165,7 @@ extension LoginViewController {
         // create attributed string
         let attributedString = NSMutableAttributedString(string:"Don't have an account? ".localized)
         let myString = "Sign Up".localized
-        let myAttribute = [ NSForegroundColorAttributeName: UIColor(red: 194/255, green: 159/255, blue: 74/255, alpha: 1.0) ]
+        let myAttribute = [ NSAttributedString.Key.foregroundColor: UIColor(red: 194/255, green: 159/255, blue: 74/255, alpha: 1.0) ]
         let myAttrString = NSAttributedString(string: myString, attributes: myAttribute)
         attributedString.append(myAttrString)
        
@@ -183,7 +183,7 @@ extension LoginViewController {
                 
                 // if is valid email
                 
-                if password?.characters.count == 0 {
+                if password?.count == 0 {
                     showAlert(message: "Please type your password".localized)
                     self.PasswordText.becomeFirstResponder()
                     return
@@ -222,9 +222,9 @@ extension LoginViewController {
     func showAlert(message: String){
         // create the alert
        // let alert = UIAlertController(title: "Alert!", message: message , preferredStyle: UIAlertControllerStyle.alert)
-         let alert = UIAlertController(title: nil, message: message , preferredStyle: UIAlertControllerStyle.alert)
+        let alert = UIAlertController(title: nil, message: message , preferredStyle: UIAlertController.Style.alert)
         // add an action (button)
-        alert.addAction(UIAlertAction(title: "OK".localized, style: UIAlertActionStyle.default, handler: nil))
+        alert.addAction(UIAlertAction(title: "OK".localized, style: UIAlertAction.Style.default, handler: nil))
         
         // show the alert
         self.present(alert, animated: true, completion: nil)
@@ -234,7 +234,7 @@ extension LoginViewController {
 extension UILabel {
     func addCharactersSpacing(spacing:CGFloat, text:String) {
         let attributedString = NSMutableAttributedString(string: text)
-        attributedString.addAttribute(NSKernAttributeName, value: spacing, range: NSMakeRange(0, text.characters.count))
+        attributedString.addAttribute(NSAttributedString.Key.kern, value: spacing, range: NSMakeRange(0, text.count))
         self.attributedText = attributedString
     }
 }
@@ -272,7 +272,7 @@ extension LoginViewController : SignUpDelegate {
         //If you have not received verification link on your email,click here to Resend
         let attributedString = NSMutableAttributedString(string:"If you have not received verification link on your email,".localized)
         let myString = "click here to Resend".localized
-        let myAttribute = [ NSForegroundColorAttributeName: UIColor(red: 194/255, green: 159/255, blue: 74/255, alpha: 1.0) ]
+        let myAttribute = [ NSAttributedString.Key.foregroundColor: UIColor(red: 194/255, green: 159/255, blue: 74/255, alpha: 1.0) ]
         let myAttrString = NSAttributedString(string: myString, attributes: myAttribute)
         attributedString.append(myAttrString)
         

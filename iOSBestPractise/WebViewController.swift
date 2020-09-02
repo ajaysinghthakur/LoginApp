@@ -35,7 +35,7 @@ class WebViewController: UIViewController, UIWebViewDelegate, WKNavigationDelega
         self.navigationController?.navigationBar.barStyle = .black
         self.navigationController?.navigationBar.tintColor = UIColor.white 
     
-        let refreshButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.refresh, target: self, action: #selector(WebViewController.refreshAction))
+        let refreshButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.refresh, target: self, action: #selector(WebViewController.refreshAction))
         navigationItem.rightBarButtonItem = refreshButton
         
         self.navigationItem.title = self.webTitle
@@ -63,7 +63,7 @@ class WebViewController: UIViewController, UIWebViewDelegate, WKNavigationDelega
         //MBProgressHUD.hide(for: self.view, animated: true)
     }
     
-    func refreshAction(){
+    @objc func refreshAction(){
         //self.pleaseWait()
         //pleaseWaitMBHUD(view: self.view)
         webView.reload()

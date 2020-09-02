@@ -81,7 +81,7 @@ class SignUpViewController: UIViewController {
         self.countryCodeLabel.font = self.countryCodeLabel.font.withSize(14.0)
         mobileNoText.leftView = self.countryCodeLabel
         
-        mobileNoText.leftViewMode = UITextFieldViewMode.always
+        mobileNoText.leftViewMode = UITextField.ViewMode.always
     }
     override func viewWillAppear(_ animated: Bool) {
         
@@ -150,17 +150,17 @@ class SignUpViewController: UIViewController {
         // let country = self.countryText.text
         // let idno = self.idNoText.text
         
-        if first?.characters.count == 0 {
+        if first?.count == 0 {
             self.firstNameText.becomeFirstResponder()
             self.showAlert(message: "Please type your first name".localized)
             return
             
-        }else if middle?.characters.count == 0 {
+        }else if middle?.count == 0 {
         
             self.middleNameText.becomeFirstResponder()
             self.showAlert(message: "Please type your middle name".localized)
             return
-        }else if last?.characters.count == 0 {
+        }else if last?.count == 0 {
             self.lastNameText.becomeFirstResponder()
             self.showAlert(message: "Please type your last name".localized)
             return
@@ -172,11 +172,11 @@ class SignUpViewController: UIViewController {
             if try email?.isEmail() == true {
                 
                 // if is valid email
-               if password?.characters.count == 0 {
+               if password?.count == 0 {
                     self.PasswordText.becomeFirstResponder()
                     self.showAlert(message: "Please type your password".localized)
                     return
-                }else if (password?.characters.count)! < 5 {
+                }else if (password?.count)! < 5 {
                     self.PasswordText.becomeFirstResponder()
                     self.showAlert(message: "Passwords must be at least 5 characters long".localized)
                     return
@@ -220,7 +220,7 @@ class SignUpViewController: UIViewController {
                     self.showAlert(message: "Please check the Terms of Use checkbox to complete Sign Up process".localized)
                     return
                 }
-            }else if  mobile?.characters.count != 0 {
+            }else if  mobile?.count != 0 {
                 self.mobileNoText.becomeFirstResponder()
                 self.showAlert(message: "Please type a valid mobile no.".localized)
                 return
@@ -233,7 +233,7 @@ class SignUpViewController: UIViewController {
             return
         }
         
-        if mobile?.characters.count == 0 {
+        if mobile?.count == 0 {
            if self.isChecked == false{
                 self.showAlert(message: "Please check the Terms of Use checkbox to complete Sign Up process".localized)
                 return
@@ -338,19 +338,19 @@ extension SignUpViewController {
     func addKeyBoardobserver() {
         
         let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard), name: Notification.Name.UIKeyboardWillHide, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard), name: Notification.Name.UIKeyboardWillChangeFrame, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard), name:UIResponder.keyboardWillHideNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
         
     }
     
     
-    func adjustForKeyboard(notification: Notification) {
+    @objc func adjustForKeyboard(notification: Notification) {
         let userInfo = notification.userInfo!
         
-        let keyboardScreenEndFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        let keyboardScreenEndFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         let keyboardViewEndFrame = view.convert(keyboardScreenEndFrame, from: view.window)
         
-        if notification.name == Notification.Name.UIKeyboardWillHide {
+        if notification.name == UIResponder.keyboardWillHideNotification {
             self.scrollView.contentInset = UIEdgeInsets.zero
         } else {
             self.scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardViewEndFrame.height, right: 0)
@@ -367,7 +367,7 @@ extension SignUpViewController {
         // create attributed string
         let attributedString = NSMutableAttributedString(string:"Already have an account? ".localized)
         let myString = "Sign In".localized
-        let myAttribute = [ NSForegroundColorAttributeName: UIColor(red: 194/255, green: 159/255, blue: 74/255, alpha: 1.0) ]
+        let myAttribute = [ NSAttributedString.Key.foregroundColor: UIColor(red: 194/255, green: 159/255, blue: 74/255, alpha: 1.0) ]
         let myAttrString = NSAttributedString(string: myString, attributes: myAttribute)
         attributedString.append(myAttrString)
         
@@ -379,7 +379,7 @@ extension SignUpViewController {
         // create attributed string
         let attributedString = NSMutableAttributedString(string:"I agree to the ".localized)
         let myString = "Terms of Use".localized
-        let myAttribute = [ NSForegroundColorAttributeName: UIColor(red: 194/255, green: 159/255, blue: 74/255, alpha: 1.0) ]
+        let myAttribute = [ NSAttributedString.Key.foregroundColor: UIColor(red: 194/255, green: 159/255, blue: 74/255, alpha: 1.0) ]
         let myAttrString = NSAttributedString(string: myString, attributes: myAttribute)
         attributedString.append(myAttrString)
         
@@ -394,11 +394,11 @@ extension SignUpViewController {
         if message == "Please check your email for the verification".localized {
             //messageTitle = "Success"
         }
-        let alert = UIAlertController(title: nil, message: message , preferredStyle: UIAlertControllerStyle.alert)
+        let alert = UIAlertController(title: nil, message: message , preferredStyle: UIAlertController.Style.alert)
         
         // add an action (button)
 
-        let action = UIAlertAction(title: "OK".localized, style: UIAlertActionStyle.default, handler: { (action) in
+        let action = UIAlertAction(title: "OK".localized, style: UIAlertAction.Style.default, handler: { (action) in
             
             if message == "Please check your email for the verification".localized{
                 self.performSegue(withIdentifier: "unwindSignupLogin", sender: self)

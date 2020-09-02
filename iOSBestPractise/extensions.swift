@@ -16,7 +16,7 @@ extension UIColor {
             let start = hexString.index(hexString.startIndex, offsetBy: 1)
             let hexColor = hexString.substring(from: start)
             
-            if hexColor.characters.count == 8 {
+            if hexColor.count == 8 {
                 let scanner = Scanner(string: hexColor)
                 var hexNumber: UInt64 = 0
                 
@@ -40,14 +40,14 @@ extension String {
     func isEmail() throws -> Bool {
         let regex = try NSRegularExpression(pattern: "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}$", options: [.caseInsensitive])
         
-        return regex.firstMatch(in: self, options: NSRegularExpression.MatchingOptions(rawValue: 0), range: NSMakeRange(0, characters.count)) != nil
+        return regex.firstMatch(in: self, options: NSRegularExpression.MatchingOptions(rawValue: 0), range: NSMakeRange(0, self.count)) != nil
     }
     
     func isValidPhoneNo() throws -> Bool {
         
         let regex = try NSRegularExpression(pattern: "[0-9]", options: [.caseInsensitive])
         
-        return regex.firstMatch(in: self, options: NSRegularExpression.MatchingOptions(rawValue: 0), range: NSMakeRange(0, characters.count)) != nil
+        return regex.firstMatch(in: self, options: NSRegularExpression.MatchingOptions(rawValue: 0), range: NSMakeRange(0, self.count)) != nil
     }
 }
 extension String {

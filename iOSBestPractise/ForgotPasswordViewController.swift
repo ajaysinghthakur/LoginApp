@@ -104,11 +104,11 @@ extension ForgotPasswordViewController {
     fileprivate func showAlert(message: String , action : UIAlertAction?){
         // create the alert
        // let alert = UIAlertController(title: "Alert!", message: message , preferredStyle: UIAlertControllerStyle.alert)
-        let alert = UIAlertController(title: "Message", message: message , preferredStyle: UIAlertControllerStyle.alert)
+        let alert = UIAlertController(title: "Message", message: message , preferredStyle: UIAlertController.Style.alert)
         // add an action (button)
         if action == nil {
         
-            let daction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: { (action) in
+            let daction = UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: { (action) in
  
         
             })
@@ -127,19 +127,19 @@ extension ForgotPasswordViewController {
     func addKeyBoardobserver() {
         
         let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard), name: Notification.Name.UIKeyboardWillHide, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard), name: Notification.Name.UIKeyboardWillChangeFrame, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
         
     }
     
     
-    func adjustForKeyboard(notification: Notification) {
+    @objc func adjustForKeyboard(notification: Notification) {
         let userInfo = notification.userInfo!
         
-        let keyboardScreenEndFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        let keyboardScreenEndFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         let keyboardViewEndFrame = view.convert(keyboardScreenEndFrame, from: view.window)
         
-        if notification.name == Notification.Name.UIKeyboardWillHide {
+        if notification.name == UIResponder.keyboardWillHideNotification {
             self.scrollView.contentInset = UIEdgeInsets.zero
         } else {
             self.scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardViewEndFrame.height, right: 0)
